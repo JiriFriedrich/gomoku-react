@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import Board from './Board'
-import {calculateWinner, checkBoard} from '../lib/lib'
+import {checkBoard} from '../lib/lib'
 
 const Game = () => {
 	const [history, setHistory] = useState([{
@@ -15,7 +15,7 @@ const Game = () => {
 		const updatedHistory = history.slice(0, stepNumber + 1);
 		const current = updatedHistory[updatedHistory.length - 1];
 		const squares = current.squares.slice();
-		if (calculateWinner(squares) || squares[i]) {
+		if (checkBoard(squares) || squares[i]) {
 			return;
 		}
 		squares[i] = xIsNext ? "X" : "O";
