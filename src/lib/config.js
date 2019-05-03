@@ -1,0 +1,11 @@
+/**
+ * Rows count
+ * @type {number}
+ */
+export const ROWS_COUNT = 15
+
+/**
+ * Count to win the game
+ * @type {number}
+ */
+export const COUNT_TO_WIN = 5

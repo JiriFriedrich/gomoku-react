@@ -1,4 +1,5 @@
 import _ from 'lodash'
+import {COUNT_TO_WIN, ROWS_COUNT} from './config'
 
 const checkBoard = (squares) => {
     const directions = [
@@ -11,7 +12,7 @@ const checkBoard = (squares) => {
         [1, 0],
         [1, 1]
     ]
-    const board = _.chunk(squares, 3)
+    const board = _.chunk(squares, ROWS_COUNT)
     let contains = false
     let winningMove = false;
 
@@ -19,7 +20,7 @@ const checkBoard = (squares) => {
         row.forEach((point, pointIndex) => {
             if (!point) return;
             directions.forEach((direction) => {
-                for (let i = 1; i < 3; i++) {
+                for (let i = 1; i < COUNT_TO_WIN; i++) {
                     contains = false
                     const absolute_value = Math.abs(direction[0])
                     const direction_point = direction[0] * i

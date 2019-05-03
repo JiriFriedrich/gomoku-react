@@ -1,10 +1,11 @@
 import React, {useState} from 'react'
 import Board from './Board'
 import {checkBoard} from '../lib/lib'
+import {ROWS_COUNT} from '../lib/config'
 
 const Game = () => {
 	const [history, setHistory] = useState([{
-		squares: Array(9).fill(null)
+		squares: Array(Math.pow(ROWS_COUNT, 2)).fill(null)
 	}])
 
 	const [stepNumber, setStepNumber] = useState(0)
