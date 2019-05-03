@@ -1,5 +1,8 @@
 import React from 'react';
 
+/**
+ * Single game field
+ */
 function Square(props) {
 	return (
 		<button className="square" onClick={props.onClick}>

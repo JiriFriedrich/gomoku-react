@@ -3,6 +3,10 @@ import Board from './Board'
 import {checkBoard} from '../lib/lib'
 import {ROWS_COUNT} from '../lib/config'
 
+/**
+ * Game root component
+ * TODO: remove logic and put it in the lib folder
+ */
 const Game = () => {
 	const [history, setHistory] = useState([{
 		squares: Array(Math.pow(ROWS_COUNT, 2)).fill(null)
@@ -13,9 +17,9 @@ const Game = () => {
 	const [xIsNext, setXIsNext] = useState(true)
 
 	const handleClick = (i) => {
-		const updatedHistory = history.slice(0, stepNumber + 1);
-		const current = updatedHistory[updatedHistory.length - 1];
-		const squares = current.squares.slice();
+		const updatedHistory = history.slice(0, stepNumber + 1)
+		const current = updatedHistory[updatedHistory.length - 1]
+		const squares = current.squares.slice()
 		if (checkBoard(squares) || squares[i]) {
 			return;
 		}
@@ -31,12 +35,12 @@ const Game = () => {
 	}
 
 	const current = history[stepNumber];
-	const winner = checkBoard(current.squares);
+	const winner = checkBoard(current.squares)
 
 	const moves = history.map((step, move) => {
 		const desc = move ?
 			'Go to move #' + move :
-			'Go to game start';
+			'Go to game start'
 		return (
 			<li key={move}>
 				<button onClick={() => jumpTo(move)}>{desc}</button>
@@ -44,11 +48,11 @@ const Game = () => {
 		);
 	});
 
-	let status;
+	let status
 	if (winner) {
-		status = "Winner: " + (!xIsNext ? "X" : "O");
+		status = "Winner: " + (!xIsNext ? "X" : "O")
 	} else {
-		status = "Next player: " + (xIsNext ? "X" : "O");
+		status = "Next player: " + (xIsNext ? "X" : "O")
 		if (!current.squares.includes(null)) {
 			status = "Draw!"
 		}
@@ -67,7 +71,7 @@ const Game = () => {
 				<ol>{moves}</ol>
 			</div>
 		</div>
-	);
+	)
 }
 
 export default Game;

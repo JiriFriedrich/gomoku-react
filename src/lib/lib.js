@@ -1,6 +1,12 @@
 import _ from 'lodash'
 import {COUNT_TO_WIN, ROWS_COUNT} from './config'
 
+/**
+ * Inspect whole board and returns whether someone won
+ * TODO: Send last position in parameter and inspect only this position
+ * @param squares
+ * @returns {boolean}
+ */
 const checkBoard = (squares) => {
     const directions = [
         [-1, -1],
