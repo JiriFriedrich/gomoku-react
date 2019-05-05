@@ -1,11 +1,10 @@
 import React, {useState} from 'react'
 import Board from './Board'
-import {checkBoard} from '../lib/lib'
-import {ROWS_COUNT} from '../lib/config'
+import {checkBoard, playerSymbol} from '../lib/lib'
+import {ROWS_COUNT, STARTING_PLAYER} from '../lib/config'
 
 /**
  * Game root component
- * TODO: remove logic and put it in the lib folder
  */
 const Game = () => {
 	const [history, setHistory] = useState([{
@@ -14,7 +13,7 @@ const Game = () => {
 
 	const [stepNumber, setStepNumber] = useState(0)
 
-	const [xIsNext, setXIsNext] = useState(true)
+	const [currentPlayer, setCurrentPlayer] = useState(STARTING_PLAYER)
 
 	const handleClick = (i) => {
 		const updatedHistory = history.slice(0, stepNumber + 1)
@@ -23,15 +22,19 @@ const Game = () => {
 		if (checkBoard(squares) || squares[i]) {
 			return;
 		}
-		squares[i] = xIsNext ? "X" : "O";
+		squares[i] = playerSymbol[currentPlayer];
 		setHistory(updatedHistory.concat([{squares: squares}]))
 		setStepNumber(updatedHistory.length)
-		setXIsNext(!xIsNext)
+		setCurrentPlayer(nextPlayer())
 	}
 
 	const jumpTo = (step) => {
 		setStepNumber(step)
-		setXIsNext((step % 2) === 0)
+		setCurrentPlayer(((step % 2) === 0) ? 'x' : 'o')
+	}
+
+	const nextPlayer = () => {
+		return (currentPlayer === 'x') ? 'o' : 'x'
 	}
 
 	const current = history[stepNumber];
@@ -50,9 +53,9 @@ const Game = () => {
 
 	let status
 	if (winner) {
-		status = "Winner: " + (!xIsNext ? "X" : "O")
+		status = "Winner: " + (playerSymbol[nextPlayer()])
 	} else {
-		status = "Next player: " + (xIsNext ? "X" : "O")
+		status = "Next player: " + playerSymbol[currentPlayer]
 		if (!current.squares.includes(null)) {
 			status = "Draw!"
 		}

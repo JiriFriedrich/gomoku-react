@@ -9,3 +9,9 @@ export const ROWS_COUNT = 15
  * @type {number}
  */
 export const COUNT_TO_WIN = 5
+
+/**
+ * Starting player symbol
+ * @type {string}
+ */
+export const STARTING_PLAYER = 'x'

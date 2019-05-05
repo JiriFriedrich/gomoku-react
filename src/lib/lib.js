@@ -2,12 +2,21 @@ import _ from 'lodash'
 import {COUNT_TO_WIN, ROWS_COUNT} from './config'
 
 /**
+ * Players symbols
+ * @type {{x: string, o: string}}
+ */
+export const playerSymbol = {
+    'x': 'X',
+    'o': 'O'
+}
+
+/**
  * Inspect whole board and returns whether someone won
  * TODO: Send last position in parameter and inspect only this position
  * @param squares
  * @returns {boolean}
  */
-const checkBoard = (squares) => {
+export const checkBoard = (squares) => {
     const directions = [
         [-1, -1],
         [-1, 0],
@@ -48,5 +57,3 @@ const checkBoard = (squares) => {
 
     return winningMove
 }
-
-export { checkBoard }
