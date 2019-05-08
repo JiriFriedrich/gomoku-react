@@ -21,34 +21,29 @@ const Board = (props) => {
 				onClick={() => props.onClick(i)}
 			/>
 		);
-	}
+	};
 
 	/**
-	 * Renders game board
+	 * Create and return 2D array representing game board
 	 * @returns {Array}
 	 */
 	const renderBoard = () => {
-		let board = []
-		let position = 0;
+		const createRow = (row_index) => {
+			return Array.from(Array(ROWS_COUNT), (value, index) => renderSquare((row_index * ROWS_COUNT) + index))
+		};
 
-		for (let i = 0; i < ROWS_COUNT; i++) {
-			let row = []
-			for (let j = 0; j < ROWS_COUNT; j++) {
-				row.push(renderSquare(position++))
-			}
-			board.push(
-				<div className="board-row" key={i}>
-					{row}
-				</div>)
-		}
-		return board
-	}
+		return Array.from(Array(ROWS_COUNT), (value, index) => (
+			<div className="board-row" key={index}>
+				{createRow(index)}
+			</div>
+		));
+	};
 
 	return (
 		<div className="board">
 			{renderBoard()}
 		</div>
 	);
-}
+};
 
 export default Board;

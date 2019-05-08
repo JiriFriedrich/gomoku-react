@@ -1,5 +1,6 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import Board from './Board'
+import GameInfo from './GameInfo'
 import {checkBoard, playerSymbol} from '../lib/lib'
 import {ROWS_COUNT, STARTING_PLAYER} from '../lib/config'
 
@@ -8,54 +9,59 @@ import {ROWS_COUNT, STARTING_PLAYER} from '../lib/config'
  */
 const Game = () => {
 	const [history, setHistory] = useState([{
-		squares: Array(Math.pow(ROWS_COUNT, 2)).fill(null)
-	}])
+		squares: Array(Math.pow(ROWS_COUNT, 2)).fill(null),
+		state: 'play',
+		player: STARTING_PLAYER,
+	}]);
 
-	const [stepNumber, setStepNumber] = useState(0)
+	const [stepNumber, setStepNumber] = useState(0);
 
-	const [currentPlayer, setCurrentPlayer] = useState(STARTING_PLAYER)
+	const [winner, setWinner] = useState(null);
 
-	const handleClick = (i) => {
-		const updatedHistory = history.slice(0, stepNumber + 1)
-		const current = updatedHistory[updatedHistory.length - 1]
-		const squares = current.squares.slice()
-		if (checkBoard(squares) || squares[i]) {
-			return;
+	const handleClick = (i, next) => {
+		// check game state
+		if (!winner) { next(i) }
+	};
+
+	const updateBoard = (i) => {
+		const updatedHistory = history.slice(0, stepNumber + 1);
+		const current = updatedHistory[updatedHistory.length - 1];
+		const squares = current.squares.slice();
+
+		if (squares[i]) { return }
+
+		squares[i] = playerSymbol[current.player];
+		let isWinner = false;
+
+		if (checkBoard(squares)) {
+			isWinner = true;
+			setWinner(current.player);
 		}
-		squares[i] = playerSymbol[currentPlayer];
-		setHistory(updatedHistory.concat([{squares: squares}]))
-		setStepNumber(updatedHistory.length)
-		setCurrentPlayer(nextPlayer())
-	}
 
-	const jumpTo = (step) => {
-		setStepNumber(step)
-		setCurrentPlayer(((step % 2) === 0) ? 'x' : 'o')
-	}
+		setHistory(updatedHistory.concat([{
+			squares: squares,
+			state: (isWinner) ? 'end' : 'play',
+			player: nextPlayer(),
+		}]));
+		setStepNumber(updatedHistory.length);
+	};
+
+	const stepChange = (step) => {
+		setStepNumber(step);
+		if (history[step].state === 'play') { setWinner(null) }
+	};
 
 	const nextPlayer = () => {
-		return (currentPlayer === 'x') ? 'o' : 'x'
-	}
+		return (history[stepNumber].player === 'x') ? 'o' : 'x'
+	};
 
 	const current = history[stepNumber];
-	const winner = checkBoard(current.squares)
 
-	const moves = history.map((step, move) => {
-		const desc = move ?
-			'Go to move #' + move :
-			'Go to game start'
-		return (
-			<li key={move}>
-				<button onClick={() => jumpTo(move)}>{desc}</button>
-			</li>
-		);
-	});
-
-	let status
+	let status;
 	if (winner) {
 		status = "Winner: " + (playerSymbol[nextPlayer()])
 	} else {
-		status = "Next player: " + playerSymbol[currentPlayer]
+		status = "Next player: " + playerSymbol[current.player];
 		if (!current.squares.includes(null)) {
 			status = "Draw!"
 		}
@@ -64,17 +70,11 @@ const Game = () => {
 	return (
 		<div className="game">
 			<div className="game-board">
-				<Board
-					squares={current.squares}
-					onClick={i => handleClick(i)}
-				/>
+				<Board squares={current.squares} onClick={i => handleClick(i, updateBoard)} />
 			</div>
-			<div className="game-info">
-				<div>{status}</div>
-				<ol>{moves}</ol>
-			</div>
+			<GameInfo status={status} history={history} stepChange={step => stepChange(step)} />
 		</div>
 	)
-}
+};
 
 export default Game;
