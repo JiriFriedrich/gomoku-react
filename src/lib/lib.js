@@ -12,11 +12,11 @@ export const playerSymbol = {
 
 /**
  * Inspect whole board and returns whether someone won
- * TODO: Send last position in parameter and inspect only this position
  * @param squares
+ * @param position
  * @returns {boolean}
  */
-export const checkBoard = (squares) => {
+export const checkBoard = (squares, position) => {
     const directions = [
         [-1, -1],
         [-1, 0],
@@ -28,32 +28,23 @@ export const checkBoard = (squares) => {
         [1, 1]
     ];
     const board = _.chunk(squares, ROWS_COUNT);
-    let contains = false;
-    let winningMove = false;
+    const rowIndex = parseInt(position / ROWS_COUNT);
+    const pointIndex = position % ROWS_COUNT;
 
-    board.forEach((row, rowIndex) => {
-        row.forEach((point, pointIndex) => {
-            if (!point) return;
-            directions.forEach((direction) => {
-                for (let i = 1; i < COUNT_TO_WIN; i++) {
-                    contains = false;
-                    const absolute_value = Math.abs(direction[0]);
-                    const direction_point = direction[0] * i;
-                    const x_point = rowIndex + (absolute_value * direction_point);
-                    if (!board[x_point]) continue;
+    return directions.reduce((accumulator, direction) => {
+        if (accumulator) return true;
+        for (let i = 1; i < COUNT_TO_WIN; i++) {
+            const absolute_value = Math.abs(direction[0]);
+            const direction_point = direction[0] * i;
+            const x_point = rowIndex + (absolute_value * direction_point);
+            if (!board[x_point]) return false;
 
-                    const absolute_value_y = Math.abs(direction[1]);
-                    const direction_point_y = direction[1] * i;
+            const absolute_value_y = Math.abs(direction[1]);
+            const direction_point_y = direction[1] * i;
 
-                    if (point === board[x_point][pointIndex + (absolute_value_y * direction_point_y)]) {
-                        contains = true
-                    }
-                    if (!contains) break
-                }
-                if (contains) winningMove = true
-            })
-        })
-    });
-
-    return winningMove
+            if (squares[position] !== board[x_point][pointIndex + (absolute_value_y * direction_point_y)])
+                return false;
+        }
+        return true;
+    }, false);
 };

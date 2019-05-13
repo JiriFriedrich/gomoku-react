@@ -33,7 +33,7 @@ const Game = () => {
 		squares[i] = playerSymbol[current.player];
 		let isWinner = false;
 
-		if (checkBoard(squares)) {
+		if (checkBoard(squares, i)) {
 			isWinner = true;
 			setWinner(current.player);
 		}
