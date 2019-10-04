@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Board from './Board'
 import GameInfo from './GameInfo'
-import {checkBoard, playerSymbol} from '../lib/lib'
-import {ROWS_COUNT, STARTING_PLAYER} from '../lib/config'
+import {checkBoard} from '../lib/lib'
+import {ROWS_COUNT, PLAYER_SYMBOLS, STARTING_PLAYER} from '../lib/config'
 
 /**
  * Game root component
@@ -30,7 +30,7 @@ const Game = () => {
 
 		if (squares[i]) { return }
 
-		squares[i] = playerSymbol[current.player];
+		squares[i] = PLAYER_SYMBOLS[current.player];
 		let isWinner = false;
 
 		if (checkBoard(squares, i)) {
@@ -52,16 +52,16 @@ const Game = () => {
 	};
 
 	const nextPlayer = () => {
-		return (history[stepNumber].player === 'x') ? 'o' : 'x'
+		return Object.keys(PLAYER_SYMBOLS).filter((player) => player !== history[stepNumber].player).find((el) => el)
 	};
 
 	const current = history[stepNumber];
 
 	let status;
 	if (winner) {
-		status = "Winner: " + (playerSymbol[nextPlayer()])
+		status = "Winner: " + (PLAYER_SYMBOLS[nextPlayer()])
 	} else {
-		status = "Next player: " + playerSymbol[current.player];
+		status = "Next player: " + PLAYER_SYMBOLS[current.player];
 		if (!current.squares.includes(null)) {
 			status = "Draw!"
 		}

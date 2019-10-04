@@ -2,15 +2,6 @@ import _ from 'lodash'
 import {COUNT_TO_WIN, ROWS_COUNT} from './config'
 
 /**
- * Players symbols
- * @type {{x: string, o: string}}
- */
-export const playerSymbol = {
-    'x': 'X',
-    'o': 'O'
-};
-
-/**
  * Inspect whole board and returns whether someone won
  * @param squares
  * @param position
