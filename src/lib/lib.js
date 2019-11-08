@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import {COUNT_TO_WIN, ROWS_COUNT} from './config'
+import {COUNT_TO_WIN, ROWS_COUNT, DIRECTIONS} from './config'
 
 /**
  * Inspect whole board and returns whether someone won
@@ -8,34 +8,44 @@ import {COUNT_TO_WIN, ROWS_COUNT} from './config'
  * @returns {boolean}
  */
 export const checkBoard = (squares, position) => {
-    const directions = [
-        [-1, -1],
-        [-1, 0],
-        [-1, 1],
-        [0, -1],
-        [0, 1],
-        [1, -1],
-        [1, 0],
-        [1, 1]
-    ];
     const board = _.chunk(squares, ROWS_COUNT);
     const rowIndex = parseInt(position / ROWS_COUNT);
     const pointIndex = position % ROWS_COUNT;
 
-    return directions.reduce((accumulator, direction) => {
+    const calculatePoint = (point, range) => {
+    	return Math.abs(point) * (point * range);
+	}
+
+	const calculateRow = (point) => {
+    	let rows = 0;
+		for (let i = 1; i < COUNT_TO_WIN; i++) {
+			const x_point = rowIndex + calculatePoint(point[0], i);
+			if (!board[x_point])
+				break;
+
+			const y_point = calculatePoint(point[1], i);
+			if (squares[position] !== board[x_point][pointIndex + y_point])
+				break;
+			rows++;
+		}
+
+		return rows;
+	}
+
+    return DIRECTIONS.reduce((accumulator, direction) => {
         if (accumulator) return true;
-        for (let i = 1; i < COUNT_TO_WIN; i++) {
-            const absolute_value = Math.abs(direction[0]);
-            const direction_point = direction[0] * i;
-            const x_point = rowIndex + (absolute_value * direction_point);
-            if (!board[x_point]) return false;
+        let count = 1;
+        count += calculateRow(direction);
+		for (let i = 1; i < COUNT_TO_WIN; i++) {
+			const x_point = rowIndex + calculatePoint(direction[0], i) * (-1);
+			if (!board[x_point])
+				break;
 
-            const absolute_value_y = Math.abs(direction[1]);
-            const direction_point_y = direction[1] * i;
-
-            if (squares[position] !== board[x_point][pointIndex + (absolute_value_y * direction_point_y)])
-                return false;
-        }
-        return true;
+			const y_point = calculatePoint(direction[1], i);
+			if (squares[position] !== board[x_point][pointIndex + (y_point  * (-1))])
+				break;
+			count++;
+		}
+        return count >= COUNT_TO_WIN;
     }, false);
 };

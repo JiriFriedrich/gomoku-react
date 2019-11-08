@@ -59,11 +59,11 @@ const Game = () => {
 
 	let status;
 	if (winner) {
-		status = "Winner: " + (PLAYER_SYMBOLS[nextPlayer()])
+		status = "Winner: " + (PLAYER_SYMBOLS[nextPlayer()]);
 	} else {
 		status = "Next player: " + PLAYER_SYMBOLS[current.player];
 		if (!current.squares.includes(null)) {
-			status = "Draw!"
+			status = "Draw!";
 		}
 	}
 

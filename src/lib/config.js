@@ -28,6 +28,13 @@ const STARTING_PLAYER = 'x';
  */
 const SHOW_GAME_INFO = true;
 
+const DIRECTIONS = [
+	[-1, -1],
+	[-1, 0],
+	[-1, 1],
+	[0, -1],
+];
+
 /**
  * Exports
  */
@@ -36,5 +43,6 @@ export {
 	COUNT_TO_WIN,
 	PLAYER_SYMBOLS,
 	STARTING_PLAYER,
-	SHOW_GAME_INFO
+	SHOW_GAME_INFO,
+	DIRECTIONS
 }
