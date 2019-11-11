@@ -16,15 +16,16 @@ export const checkBoard = (squares, position) => {
     	return Math.abs(point) * (point * range);
 	}
 
-	const calculateRow = (point) => {
+	const calculateRow = (point, reverse = false) => {
     	let rows = 0;
+    	const direction = (reverse) ? -1 : 1;
 		for (let i = 1; i < COUNT_TO_WIN; i++) {
-			const x_point = rowIndex + calculatePoint(point[0], i);
+			const x_point = rowIndex + calculatePoint(point[0], i) * direction;
 			if (!board[x_point])
 				break;
 
 			const y_point = calculatePoint(point[1], i);
-			if (squares[position] !== board[x_point][pointIndex + y_point])
+			if (squares[position] !== board[x_point][pointIndex + (y_point * direction)])
 				break;
 			rows++;
 		}
@@ -36,16 +37,7 @@ export const checkBoard = (squares, position) => {
         if (accumulator) return true;
         let count = 1;
         count += calculateRow(direction);
-		for (let i = 1; i < COUNT_TO_WIN; i++) {
-			const x_point = rowIndex + calculatePoint(direction[0], i) * (-1);
-			if (!board[x_point])
-				break;
-
-			const y_point = calculatePoint(direction[1], i);
-			if (squares[position] !== board[x_point][pointIndex + (y_point  * (-1))])
-				break;
-			count++;
-		}
+        count += calculateRow(direction, true)
         return count >= COUNT_TO_WIN;
     }, false);
 };
