@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import Board from './Board'
 import GameInfo from './GameInfo'
-import {checkBoard} from '../lib/lib'
-import {ROWS_COUNT, PLAYER_SYMBOLS, STARTING_PLAYER} from '../lib/config'
+import { checkBoard } from '../lib/lib'
+import { ROWS_COUNT, PLAYER_SYMBOLS, STARTING_PLAYER } from '../lib/config'
 
 /**
  * Game root component
@@ -48,7 +48,12 @@ const Game = () => {
 
 	const stepChange = (step) => {
 		setStepNumber(step);
-		if (history[step].state === 'play') { setWinner(null) }
+		if (history[step].state === 'play') {
+			setWinner(null)
+		}
+		if (history[step].state === 'end') {
+			setWinner(history[step].player)
+		}
 	};
 
 	const nextPlayer = () => {
